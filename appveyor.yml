@@ -1,0 +1,16 @@
+-
+  branches:
+    only:
+      - deploy
+
+  version: "deploy-{build}"
+
+  shallow_clone: true
+
+  environment:
+    matrix:
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2.2}
+
+  build_script:
+    - appveyor DownloadFile https://aantron.github.io/binaries/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1
+    - ps: .\install.ps1

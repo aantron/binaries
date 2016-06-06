@@ -1,0 +1,28 @@
+NAME="opam"
+VERSION="1.2.2"
+RELEASE="1"
+
+CATEGORY="OCaml"
+SUMMARY="OCaml package manager"
+DESCRIPTION="OPAM is a source-based package manager for OCaml. It supports
+multiple simultaneous compiler installations, flexible package constraints,
+and a Git-friendly development workflow."
+HOMEPAGE="https://opam.ocaml.org/"
+
+SRC_URI="https://github.com/ocaml/opam/releases/download/1.2.2/opam-full-1.2.2.tar.gz"
+SRC_DIR="opam-full-1.2.2"
+
+src_compile() {
+    lndirs
+    cd ${B}
+    env DJDIRS=workaround
+    ./configure -prefix /usr
+    cygmake -j1 lib-ext
+    cygmake -j1
+}
+
+# Avoid cygport invoking make install/fast.
+src_install() {
+    cd ${B}
+    cygmake -j1 install DESTDIR=${D}
+}
