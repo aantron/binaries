@@ -1,5 +1,5 @@
 Based on https://github.com/ocaml/ocaml/commit/0f5046b8b48b7f6b9c343aab99d4b1314586802c.
-
+Cygwin64: resolves https://ci.appveyor.com/project/aantron/binaries/build/43-cygwin/job/jubrcg207vwxpc3c#L669.
 --- origsrc/ocaml-4.01.0/Makefile	2013-06-17 08:15:18.000000000 -0500
 +++ src/ocaml-4.01.0/Makefile	2016-06-05 17:58:20.000000000 -0500
 @@ -761,8 +761,8 @@
@@ -13,7 +13,7 @@ Based on https://github.com/ocaml/ocaml/commit/0f5046b8b48b7f6b9c343aab99d4b1314
  	  else :; \
  	fi
  	@rm -f tools/checkstack
-diff -ur origsrc/ocaml-4.01.0/configure src/ocaml-4.01.0/configure
+Cygwin64: resolves https://ci.appveyor.com/project/aantron/binaries/build/42-cygwin/job/fgdo2eva4w3nxvsf#L356.
 --- origsrc/ocaml-4.01.0/configure	2013-08-23 01:22:36.000000000 -0500
 +++ src/ocaml-4.01.0/configure	2016-06-05 17:55:48.000000000 -0500
 @@ -323,10 +323,15 @@

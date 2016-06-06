@@ -1,5 +1,5 @@
 See http://caml.inria.fr/mantis/view.php?id=6319.
-
+Cygwin: resolves https://ci.appveyor.com/project/aantron/binaries/build/28-cygwin/job/p7uyey42s54pon1k#L720.
 --- origsrc/ocaml-4.02.3/Makefile
 +++ src/ocaml-4.02.3/Makefile
 @@ -467,7 +467,6 @@ utils/config.ml: utils/config.mlp config/Makefile
