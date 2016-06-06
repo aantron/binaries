@@ -10,7 +10,9 @@
   environment:
     matrix:
       - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.02}
       - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.02}
 
   build_script:
     - ps: '& ".\src\test\$env:SYSTEM.ps1"'
@@ -27,7 +29,9 @@
   environment:
     matrix:
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.02}
       - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.02}
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2.2}
 
   build_script:

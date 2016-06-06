@@ -1,0 +1,49 @@
+# Adapted from the ocaml-4.02.3-2 package in Cygwin.
+
+NAME="ocaml"
+VERSION="99"
+RELEASE="1"
+
+CATEGORY="OCaml"
+SUMMARY="The OCaml compiler and runtime"
+DESCRIPTION="OCaml is a fast modern type-inferring functional programming
+language descended from the ML (Meta Language) family, featuring objects,
+modules, and a high-performance native-code compiler. The OCaml compiler is
+developed by a worldwide distributed team coordinated by the Gallium
+project-team at Inria Paris."
+HOMEPAGE="https://ocaml.org/"
+
+SRC_URI="http://caml.inria.fr/pub/distrib/ocaml-4.02/ocaml-4.02.3.tar.xz"
+PATCH_URI="libcamlrun_shared.patch"
+
+# It is necessary to tell cygport the source directory name, because we are
+# using the fake version number "99" to make sure this package is selected over
+# any other OCaml package. As a consequence, cygport can't infer the correct
+# source directory name from the version number.
+SRC_DIR="ocaml-4.02.3"
+
+OCAML_LIBDIR="/usr/lib/ocaml"
+
+src_compile() {
+    lndirs
+    cd ${B}
+    ./configure \
+        -bindir /usr/bin \
+        -libdir ${OCAML_LIBDIR} \
+        -mandir /usr/share/man \
+        || error "configure failed"
+    cygmake -j1 world.opt
+}
+
+src_test() {
+    cd ${B}/testsuite
+    cygmake -j1 all
+}
+
+src_install() {
+    cd ${B}
+    cyginstall -j1
+    dodir /usr/include
+    dosym ../${OCAML_LIBDIR#/usr/}caml /usr/include/caml
+    dodoc Updating
+}
