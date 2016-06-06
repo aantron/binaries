@@ -11,6 +11,7 @@
     matrix:
       - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
       - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.02}
+      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.01}
       - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.03}
       - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.02}
 
@@ -30,6 +31,7 @@
     matrix:
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.03}
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.02}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.01}
       - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
       - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.02}
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2.2}
