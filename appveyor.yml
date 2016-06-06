@@ -1,6 +1,23 @@
 -
   branches:
     only:
+      - master
+
+  version: "test-{build}"
+
+  shallow_clone: true
+
+  environment:
+    matrix:
+      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.03}
+
+  build_script:
+    - ps: '& ".\src\test\$env:SYSTEM.ps1"'
+
+-
+  branches:
+    only:
       - deploy
 
   version: "deploy-{build}"
