@@ -1,41 +1,30 @@
 set -e
-
-[ -d .git ] || ( >&2 echo "Run in project root" ; exit 1 )
+set -x
 
 COMMIT=$(git log | head -n 1 | awk '{print $2}')
 
-DEPLOY_CLONE=scratch/deploy
+git clone git@github.com:aantron/binaries.git $DEPLOY_DIR
 
-rm -rf $DEPLOY_CLONE
-mkdir -p scratch
-git clone git@github.com:aantron/binaries.git $DEPLOY_CLONE
-
-(cd $DEPLOY_CLONE && \
+# Commit index.html and the generate install scripts in branch gh-pages.
+(cd $DEPLOY_DIR && \
     git checkout gh-pages)
-rm -rf $DEPLOY_CLONE/*
-cp src/util/index.html $DEPLOY_CLONE/
 
-for FILE in $(ls src/install/cygwin/*.in)
-do
-    BASENAME=$(basename $FILE)
-    TITLE=${BASENAME%.*.*}
-    SUBDIRECTORY=$(echo $TITLE | tr '-' '/')
-    OUTPUT_FILE=$DEPLOY_CLONE/cygwin/$SUBDIRECTORY/install.ps1
-    OUTPUT_DIRECTORY=$(dirname $OUTPUT_FILE)
+rm -rf $DEPLOY_DIR/*
+cp src/util/index.html $DEPLOY_DIR/
+cp -r $BUILD_DIR/* $DEPLOY_DIR/
 
-    mkdir -p $OUTPUT_DIRECTORY
-    bash src/util/cygwin-install-template.sh $FILE > $OUTPUT_FILE
-done
-
-(cd $DEPLOY_CLONE && \
+(cd $DEPLOY_DIR && \
     git add -A && \
     git commit --amend --reset-author -m $COMMIT && \
-    git push -f && \
+    git push -f)
+
+# Commit appveyor.yml in branch deploy to trigger a self-test.
+(cd $DEPLOY_DIR && \
     git checkout deploy)
 
-cp appveyor.yml $DEPLOY_CLONE/
+cp appveyor.yml $DEPLOY_DIR/
 
-(cd $DEPLOY_CLONE && \
+(cd $DEPLOY_DIR && \
     git add -A && \
     git commit --amend --reset-author -m $COMMIT && \
     git push -f)
