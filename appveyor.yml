@@ -16,6 +16,7 @@
       - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.02}
 
   build_script:
+    - C:\Cygwin64\bin\bash -lc "make -C /cygdrive/c/projects/binaries build"
     - ps: '& ".\src\test\$env:SYSTEM.ps1"'
 
 -

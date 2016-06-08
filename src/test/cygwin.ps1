@@ -20,14 +20,8 @@ else {
 function Install {
     $package = $args[0]
     $version = $args[1]
-    $in_file = "src/install/cygwin/$env:ARCH-$package-$version.ps1.in"
-    $here = "/cygdrive/c/projects/binaries"
-
-    echo "[test] Generating install script from $in_file"
-
-    & $bash "-lc", "cd $here ; bash src/util/cygwin-install-template.sh $in_file > install.ps1"
-    CheckExitCode "install.ps1 generation"
-    ./install.ps1
+    $script = ".\_build\cygwin\$env:ARCH\$package\$version\install.ps1"
+    & $script
     CheckExitCode "install.ps1"
 }
 
