@@ -1,7 +1,8 @@
 -
   branches:
-    only:
-      - master
+    except:
+      - deploy
+      - /build-.*/
 
   version: "test-{build}"
 
