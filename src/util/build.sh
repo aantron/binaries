@@ -20,7 +20,7 @@ do
 
     case $KIND in
         "in")
-            COMMAND="bash src/util/cygwin-install-template.sh $FILE > $OUTPUT_FILE";;
+            COMMAND="bash src/install/$PLATFORM/template.sh $FILE > $OUTPUT_FILE";;
         "full")
             COMMAND="cp $FILE $OUTPUT_FILE";;
         *)
