@@ -1,0 +1,36 @@
+version: "cygwin-{build}"
+
+environment:
+  matrix:
+    - ARCH: x86
+      CYGWIN: C:\Cygwin
+      CYGSH: C:\Cygwin\bin\bash -lc
+    # Not building on Cygwin64:
+    # https://ci.appveyor.com/project/aantron/binaries/build/cygwin-100/job/33timh907e1ldyvg#L326
+    # - ARCH: x86_64
+    #   CYGWIN: C:\Cygwin64
+    #   CYGSH: C:\Cygwin64\bin\bash -lc
+
+build_script:
+  - "%CYGWIN%\\setup-%ARCH%.exe -q -P cygport"
+
+  # Be explicit about which OCaml we are building against. Check out a specific
+  # commit of ocaml-binaries and use the installer found there.
+  - git checkout d4a576f727818161c06082f60850b4f3ea000dad
+  - "%CYGSH% 'make -C /cygdrive/c/projects/binaries build'"
+  - ps: '& ".\_build\cygwin\$env:ARCH\ocaml\4.03\install.ps1"'
+  - git clean -ffd
+
+  # Now, try to build Camlp4.
+  - git checkout %APPVEYOR_REPO_COMMIT%
+  - "%CYGSH% 'cd /cygdrive/c/projects/binaries ; ./build.sh'"
+
+  # Show the build files.
+  - cat appveyor.yml
+  - cat build.sh
+  - cat ocaml-camlp4.cygport
+
+artifacts:
+  - name: packages-ocaml-camlp4
+    path: packages
+    type: zip
