@@ -27,7 +27,7 @@ echo
 echo
 
 echo '$arch' = "\"$ARCH\""
-echo '$package' = "\"$PACKAGE\""
+echo '$inferred_package' = "\"$PACKAGE\""
 echo '$version' = "\"$VERSION\""
 
 echo

@@ -22,6 +22,11 @@ switch ($arch) {
     }
 }
 
+# Settle on a package name.
+if (-not (Test-Path variable:script:package)) {
+    $package = $inferred_package
+}
+
 switch ($package) {
     "ocaml" {
         echo "Installing flexdll..."
