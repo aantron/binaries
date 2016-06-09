@@ -13,3 +13,7 @@ build :
 deploy : build
 	rm -rf $(DEPLOY_DIR)
 	bash src/util/deploy.sh
+
+.PHONY : clean
+clean :
+	rm -rf $(BUILD_DIR) $(DEPLOY_DIR)
