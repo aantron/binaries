@@ -16,10 +16,6 @@ else
     exit 1
 fi
 
-BOILERPLATE=cygwin-install-boilerplate.txt
-BOILERPLATE=$(dirname "$0")/$BOILERPLATE
-[ -f "$BOILERPLATE" ] || ( >&2 echo "$BOILERPLATE not found" ; exit 1 )
-
 cat $1
 
 echo
@@ -34,4 +30,11 @@ echo
 echo
 echo
 
-cat "$BOILERPLATE"
+cat src/install/cygwin/common.frag.ps1
+
+echo
+echo
+echo
+
+PACKAGE_SCRIPT=src/install/cygwin/$PACKAGE.frag.ps1
+cat $PACKAGE_SCRIPT
