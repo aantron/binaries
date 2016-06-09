@@ -1,6 +1,6 @@
 set -e
 
-REGEX='.*cygwin/([^-]+)-([^-]+)-([^-]+)\.ps1\.in$'
+REGEX='.*cygwin/([^-]+)-([^-]+)-([^-]+)\.in\.ps1$'
 
 if [[ $1 =~ $REGEX ]]
 then
