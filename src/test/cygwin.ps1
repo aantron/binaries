@@ -33,8 +33,8 @@ if ($env:ARCH -ne "x86_64") {
 
     $ErrorActionPreference = "Continue"
 
-    echo "opam init -y"
-    & $bash "-lc", "opam init -y"
+    echo "opam init -y --auto-setup"
+    & $bash "-lc", "opam init -y --auto-setup"
     echo "opam install -y ocamlfind"
     & $bash "-lc", "opam install -y ocamlfind"
     CheckExitCode "OPAM test"
