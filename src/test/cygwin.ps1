@@ -29,7 +29,7 @@ Install "ocaml" $env:COMPILER
 
 # No OPAM for Cygwin64 yet.
 if ($env:ARCH -ne "x86_64") {
-    Install "opam" "1.2.2"
+    Install "opam" "1.2"
 
     $ErrorActionPreference = "Continue"
 

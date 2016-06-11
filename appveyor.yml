@@ -36,7 +36,7 @@
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.01}
       - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
       - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.02}
-      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2.2}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2}
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.02, INSTALL: no}
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.01, INSTALL: no}
 
