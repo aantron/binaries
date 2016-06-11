@@ -29,6 +29,7 @@ if (-not (Test-Path variable:script:package)) {
 
 function Install-Package {
     echo "Downloading Cygwin repository with package $package..."
+    echo "Archive: $archive"
 
     $archive_name = "packages-$package.zip"
     Invoke-WebRequest $archive -OutFile $archive_name
