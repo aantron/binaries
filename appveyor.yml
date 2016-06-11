@@ -41,5 +41,6 @@
       - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.01, INSTALL: no}
 
   build_script:
+    - 'echo Timestamp: %APPVEYOR_REPO_COMMIT_TIMESTAMP%'
     - appveyor DownloadFile https://aantron.github.io/binaries/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1
     - ps: 'if ($env:INSTALL -ne "no") { .\install.ps1 }'
