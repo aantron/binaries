@@ -1,7 +1,7 @@
 set -e
 set -x
 
-COMMIT=$(git log | head -n 1 | awk '{print $2}')
+MESSAGE=$(git log --format=$'%H\n\n%B' -n 1)
 
 git clone git@github.com:aantron/binaries.git $DEPLOY_DIR
 
@@ -15,7 +15,7 @@ cp -r $BUILD_DIR/* $DEPLOY_DIR/
 
 (cd $DEPLOY_DIR && \
     git add -A && \
-    git commit --amend --reset-author -m $COMMIT && \
+    git commit --amend --reset-author -m "$MESSAGE" && \
     git push -f)
 
 # Commit appveyor.yml in branch deploy to trigger a self-test.
@@ -26,5 +26,5 @@ cp appveyor.yml $DEPLOY_DIR/
 
 (cd $DEPLOY_DIR && \
     git add -A && \
-    git commit --amend --reset-author -m $COMMIT && \
+    git commit --amend --reset-author -m "$MESSAGE" && \
     git push -f)
