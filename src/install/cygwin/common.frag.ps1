@@ -41,6 +41,10 @@ function Run-CygwinSetup {
     # Not checking the exit code here, as it isn't always set.
 }
 
+# Make sure /etc/skel is copied now, to prevent surprising output that may be
+# captured later.
+Run-Bash "true"
+
 # Settle on a package name.
 if (-not (Test-Path variable:script:package)) {
     $package = $inferred_package
