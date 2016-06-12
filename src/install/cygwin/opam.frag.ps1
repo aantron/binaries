@@ -1,16 +1,17 @@
 # Install aspcud.
 $aspcud_archive = "http://downloads.sourceforge.net/project/potassco/aspcud/1.9.1/aspcud-1.9.1-win64.zip"
 
-$aspcud_archive_filename = "aspcud.zip"
+$aspcud_archive_filename = "$working_directory\aspcud.zip"
+$aspcud_archive_filename_cygwin = iex "$bash -lc `"cygpath -au '$aspcud_archive_filename'`""
+$aspcud_extracted = "$working_directory\aspcud"
 # Use Cygwin wget, because Invoke-WebRequest doesn't seem to follow
 # SourceForge's meta refresh.
-$here = & "cygpath" "-au" "."
-Run-Bash wget -q -O "/cygdrive/$here/$aspcud_archive_filename" $aspcud_archive
-Run "Expand-Archive $aspcud_archive_filename"
+Run-Bash "wget -O $aspcud_archive_filename_cygwin $aspcud_archive 2>&1"
+Run "Expand-Archive '$aspcud_archive_filename' '$aspcud_extracted'"
 
 $aspcud_dest = "$cygwin\bin"
-Run "mv aspcud\aspcud-*\*.exe '$aspcud_dest'"
-Run "aspcud\aspcud-*\*.lp '$aspcud_dest'"
+Run "mv '$aspcud_extracted\aspcud-*\*.exe' '$aspcud_dest'"
+Run "mv '$aspcud_extracted\aspcud-*\*.lp' '$aspcud_dest'"
 
 # The downloaded aspcud is a native Windows application, and does not understand
 # Cygwin paths. Wrap it in a script which treats any argument containing '/' as

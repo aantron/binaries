@@ -50,11 +50,22 @@ if (-not (Test-Path variable:script:package)) {
     $package = $inferred_package
 }
 
-function Install-Package {
-    $archive_name = "packages-$package.zip"
-    Run "Invoke-WebRequest '$archive' -OutFile $archive_name"
-    Run "Expand-Archive $archive_name"
+# Working directory.
+$working_directory = "$env:TEMP\ocaml-binaries"
 
-    $packages_path = (Get-Item -Path "packages-$package" -Verbose).FullName
+if (Test-Path $working_directory) {
+    rm -recurse $working_directory
+}
+
+md $working_directory > $null
+
+# Package installation.
+function Install-Package {
+    $archive_name = "$working_directory\packages-$package.zip"
+    $packages_path = "$working_directory\packages-$package"
+
+    Run "Invoke-WebRequest '$archive' -OutFile '$archive_name'"
+    Run "Expand-Archive '$archive_name' '$packages_path'"
+
     Run-CygwinSetup -L -l $packages_path -P $package
 }

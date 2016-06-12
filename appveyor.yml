@@ -19,6 +19,7 @@
   build_script:
     - C:\Cygwin64\bin\bash -lc "make -C /cygdrive/c/projects/binaries build"
     - ps: '& ".\src\test\$env:SYSTEM.ps1"'
+    - ls
 
 -
   branches:
@@ -44,3 +45,4 @@
     - 'echo Timestamp: %APPVEYOR_REPO_COMMIT_TIMESTAMP%'
     - appveyor DownloadFile https://aantron.github.io/binaries/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1
     - ps: 'if ($env:INSTALL -ne "no") { .\install.ps1 }'
+    - ls
