@@ -10,10 +10,12 @@ function CheckExitCode {
 # Cygwin.
 switch ($arch) {
     "x86" {
+        $cygwin = "C:\Cygwin"
         $setup = "C:\Cygwin\setup-x86.exe"
         $bash = "C:\Cygwin\bin\bash.exe"
     }
     "x86_64" {
+        $cygwin = "C:\Cygwin64"
         $setup = "C:\Cygwin64\setup-x86_64.exe"
         $bash = "C:\Cygwin64\bin\bash.exe"
     }

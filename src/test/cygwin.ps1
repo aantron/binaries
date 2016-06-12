@@ -31,8 +31,6 @@ Install "ocaml" $env:COMPILER
 if ($env:ARCH -ne "x86_64") {
     Install "opam" "1.2"
 
-    $ErrorActionPreference = "Continue"
-
     echo "opam init -y --auto-setup"
     & $bash "-lc", "opam init -y --auto-setup"
     echo "opam install -y ocamlfind"
