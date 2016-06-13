@@ -38,7 +38,7 @@ function Run-Bash {
 function Run-CygwinSetup {
     rm $cygwin\var\log\setup*
 
-    $setup_args = @("-W", "-q") + $args
+    $setup_args = @("-W", "-q", "-n") + $args
 
     echo "+ cmd /c start /wait $setup $setup_args"
     $code = {
