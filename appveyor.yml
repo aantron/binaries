@@ -1,0 +1,48 @@
+-
+  branches:
+    except:
+      - deploy
+      - /build-.*/
+
+  version: "test-{build}"
+
+  shallow_clone: true
+
+  environment:
+    matrix:
+      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.02}
+      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.01}
+      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.02}
+
+  build_script:
+    - C:\Cygwin64\bin\bash -lc "make -C /cygdrive/c/projects/binaries build"
+    - ps: '& ".\src\test\$env:SYSTEM.ps1"'
+    - ls
+
+-
+  branches:
+    only:
+      - deploy
+
+  version: "deploy-{build}"
+
+  shallow_clone: true
+
+  environment:
+    matrix:
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.02}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.01}
+      - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.02}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.02, INSTALL: no}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.01, INSTALL: no}
+
+  build_script:
+    - 'echo Timestamp: %APPVEYOR_REPO_COMMIT_TIMESTAMP%'
+    - appveyor DownloadFile https://aantron.github.io/binaries/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1
+    - ps: 'if ($env:INSTALL -ne "no") { .\install.ps1 }'
+    - ls
