@@ -36,9 +36,34 @@ function Run-Bash {
 }
 
 function Run-CygwinSetup {
+    rm $cygwin\var\log\setup*
+
     $setup_args = @("-W", "-q") + $args
-    Run "cmd /c start /wait $setup $setup_args"
-    # Not checking the exit code here, as it isn't always set.
+
+    echo "+ cmd /c start /wait $setup $setup_args"
+    $code = {
+        param($setup, $setup_args)
+        cmd /c start /wait $setup $setup_args
+    }
+
+    if ("-L" -in $args) {
+        $timeout = 15
+    }
+    else {
+        $timeout = 30
+    }
+
+    $job = Start-Job $code -ArgumentList @($setup, $setup_args)
+    if (Wait-Job $job -Timeout $timeout) {
+        Receive-Job $job
+    }
+
+    if (Get-Process "setup-x86*" -ErrorAction SilentlyContinue) {
+        echo "WARNING: Setup is still running after $timeout s"
+    }
+
+    Remove-Job $job -Force
+    Stop-Process -Name "setup-x86*" -Force
 }
 
 # Make sure /etc/skel is copied now, to prevent surprising output that may be
