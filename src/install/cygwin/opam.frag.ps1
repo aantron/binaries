@@ -1,24 +1,21 @@
 # Install aspcud.
 $aspcud_archive = "http://downloads.sourceforge.net/project/potassco/aspcud/1.9.1/aspcud-1.9.1-win64.zip"
 
-echo "Installing aspcud..."
-echo "Archive: $aspcud_archive"
-
 $aspcud_archive_filename = "aspcud.zip"
 # Use Cygwin wget, because Invoke-WebRequest doesn't seem to follow
 # SourceForge's meta refresh.
 $here = & "cygpath" "-au" "."
-& $bash "-lc", "wget -q -O /cygdrive/$here/$aspcud_archive_filename $aspcud_archive"
-Expand-Archive $aspcud_archive_filename
+Run-Bash wget -q -O "/cygdrive/$here/$aspcud_archive_filename" $aspcud_archive
+Run "Expand-Archive $aspcud_archive_filename"
 
 $aspcud_dest = "$cygwin\bin"
-mv "aspcud\aspcud-*\*.exe" $aspcud_dest
-mv "aspcud\aspcud-*\*.lp" $aspcud_dest
+Run "mv aspcud\aspcud-*\*.exe '$aspcud_dest'"
+Run "aspcud\aspcud-*\*.lp '$aspcud_dest'"
 
 # The downloaded aspcud is a native Windows application, and does not understand
 # Cygwin paths. Wrap it in a script which treats any argument containing '/' as
 # a Cygwin path, and translates it to a Windows path using the cygpath utility.
-mv "$aspcud_dest\aspcud.exe" "$aspcud_dest\aspcud-wrapped.exe"
+Run "mv '$aspcud_dest\aspcud.exe' '$aspcud_dest\aspcud-wrapped.exe'"
 $aspcud_wrapper = "$cygwin\bin\aspcud"
 
 echo '#! /bin/bash' >> $aspcud_wrapper
@@ -41,14 +38,11 @@ echo 'done' >> $aspcud_wrapper
 echo '' >> $aspcud_wrapper
 echo '$ASPCUD ${ASPCUD_ARGS[@]}' >> $aspcud_wrapper
 
-dos2unix -q $aspcud_wrapper
+Run "dos2unix -q '$aspcud_wrapper'"
 
-& $bash "-lc" "chmod +x /bin/aspcud"
+Run-Bash chmod +x /bin/aspcud
 
 # Install OPAM.
 Install-Package
 
-echo "Checking $package..."
-
-& $bash "-lc", "opam --version | grep $version"
-CheckExitCode "sanity check"
+Run-Bash "opam --version | grep $version"

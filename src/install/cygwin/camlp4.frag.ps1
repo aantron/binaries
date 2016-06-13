@@ -1,9 +1,6 @@
 echo "Camlp4: checking for compatible OCaml version"
-& $bash "-lc", "ocaml -version | grep $version"
-CheckExitCode "OCaml version check"
+Run-Bash "ocaml -version | grep $version"
 
 Install-Package
 
-echo "Checking $package..."
-& $bash "-lc", "camlp4o -version | grep $version"
-CheckExitCode "sanity check"
+Run-Bash "camlp4o -version | grep $version"

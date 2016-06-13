@@ -17,9 +17,7 @@ else {
 
 # Install OCaml, OPAM, and try to build ocamlfind with them.
 
-function Install {
-    $private:package = $args[0]
-    $private:version = $args[1]
+function Install($package, $version) {
     $private:script = ".\_build\cygwin\$env:ARCH\$package\$version\install.ps1"
     & $script
     CheckExitCode_ "install.ps1"

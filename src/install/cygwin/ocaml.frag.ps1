@@ -1,9 +1,5 @@
-echo "Installing flexdll..."
-Start-Process $setup @("-W", "-q", "-P", "flexdll") -Wait
+Run-CygwinSetup -P flexdll
 
 Install-Package
 
-echo "Checking $package..."
-
-& $bash "-lc", "ocaml -version | grep $version"
-CheckExitCode "sanity check"
+Run-Bash "ocaml -version | grep $version"
