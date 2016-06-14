@@ -47,6 +47,6 @@
     - 'echo Commit timestamp: %APPVEYOR_REPO_COMMIT_TIMESTAMP%'
     - 'echo Deploy timestamp: %DEPLOY_TIME%'
     - 'echo Subdirectory: %SUBDIRECTORY%'
-    - appveyor DownloadFile https://aantron.github.io/binaries/%SUBDIRECTORY%/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1
-    - ps: 'if ($env:INSTALL -ne "no") { .\install.ps1 }'
+    - 'SET URL=https://aantron.github.io/binaries/%SUBDIRECTORY%/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1'
+    - ps: 'if ($env:INSTALL -eq "no") { (new-object net.webclient).DownloadString($env:URL) > $null } else { iex ((new-object net.webclient).DownloadString($env:URL)) }'
     - ls
