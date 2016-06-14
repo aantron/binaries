@@ -34,8 +34,17 @@ switch ($arch) {
     }
 }
 
+function Timestamp {
+    $now = Get-Date
+    $hr = $now.Hour.ToString("00")
+    $min = $now.Minute.ToString("00")
+    $sec = $now.Second.ToString("00")
+    "${hr}:${min}:${sec}"
+}
+
 function Run($command) {
-    echo "+ $command"
+    $now = Timestamp
+    echo "+ [$now] $command"
     iex $command
 }
 
@@ -50,17 +59,24 @@ function Run-CygwinSetup {
 
     $setup_args = @("-W", "-q", "-n") + $args
 
-    echo "+ cmd /c start /wait $setup $setup_args"
+    $now = Timestamp
+    echo "+ [$now] cmd /c start /wait $setup $setup_args"
     $code = {
         param($setup, $setup_args)
         cmd /c start /wait $setup $setup_args
     }
 
+    # See https://github.com/aantron/binaries/commit/6a4c4ec4291de4771a7b08a5d5ef42d7be28c38d.
     if ("-L" -in $args) {
         $timeout = 15
     }
     else {
         $timeout = 30
+    }
+
+    # Cygwin64's setup.exe is considerably slower than Cygwin32's.
+    if ($arch -eq "x86_64") {
+        $timeout = $timeout * 2
     }
 
     $job = Start-Job $code -ArgumentList @($setup, $setup_args)
