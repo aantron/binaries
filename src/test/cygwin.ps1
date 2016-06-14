@@ -19,8 +19,8 @@ else {
 
 function Install($package, $version) {
     $private:script = ".\_build\cygwin\$env:ARCH\$package\$version\install.ps1"
-    & $script
-    CheckExitCode_ "install.ps1"
+    cat $script | PowerShell -Command -
+    CheckExitCode_ "$script"
 }
 
 Install "ocaml" $env:COMPILER
