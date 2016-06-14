@@ -48,5 +48,5 @@
     - 'echo Deploy timestamp: %DEPLOY_TIME%'
     - 'echo Subdirectory: %SUBDIRECTORY%'
     - 'SET URL=https://aantron.github.io/binaries/%SUBDIRECTORY%/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1'
-    - ps: 'if ($env:INSTALL -eq "no") { (new-object net.webclient).DownloadString($env:URL) > $null } else { iex ((new-object net.webclient).DownloadString($env:URL)) }'
+    - ps: 'if ($env:INSTALL -eq "no") { (new-object net.webclient).DownloadString($env:URL) > $null } else { (new-object net.webclient).DownloadString($env:URL) | PowerShell -Command - }'
     - ls
