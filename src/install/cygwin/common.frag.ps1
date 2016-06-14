@@ -24,8 +24,17 @@ switch ($arch) {
     }
 }
 
+function Timestamp {
+    $now = Get-Date
+    $hr = $now.Hour.ToString("00")
+    $min = $now.Minute.ToString("00")
+    $sec = $now.Second.ToString("00")
+    "${hr}:${min}:${sec}"
+}
+
 function Run($command) {
-    echo "+ $command"
+    $now = Timestamp
+    echo "+ [$now] $command"
     iex $command
 }
 
@@ -40,7 +49,8 @@ function Run-CygwinSetup {
 
     $setup_args = @("-W", "-q", "-n") + $args
 
-    echo "+ cmd /c start /wait $setup $setup_args"
+    $now = Timestamp
+    echo "+ [$now] cmd /c start /wait $setup $setup_args"
     $code = {
         param($setup, $setup_args)
         cmd /c start /wait $setup $setup_args
