@@ -19,6 +19,8 @@ mkdir -p $DEPLOY_DIR/$SUBDIRECTORY
 cp src/util/index.html $DEPLOY_DIR/$SUBDIRECTORY/
 cp -r $BUILD_DIR/* $DEPLOY_DIR/$SUBDIRECTORY/
 
+touch $DEPLOY_DIR/.nojekyll
+
 (cd $DEPLOY_DIR && \
     git add -A && \
     git commit -m "$MESSAGE" && \
