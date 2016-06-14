@@ -43,6 +43,8 @@ Run "dos2unix -q '$aspcud_wrapper'"
 
 Run-Bash chmod +x /bin/aspcud
 
+Run-Bash "aspcud -v | grep `"1\\.9`""
+
 # Install OPAM.
 Install-Package
 
