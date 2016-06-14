@@ -12,6 +12,11 @@ build :
 .PHONY : deploy
 deploy : build
 	rm -rf $(DEPLOY_DIR)
+	SUBDIRECTORY=staging bash src/util/deploy.sh
+
+.PHONY : live-deploy
+live-deploy : build
+	rm -rf $(DEPLOY_DIR)
 	bash src/util/deploy.sh
 
 .PHONY : clean
