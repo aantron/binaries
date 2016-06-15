@@ -8,6 +8,14 @@
 
   shallow_clone: true
 
+  only_commits:
+    files:
+      - src/install/cygwin/**/*
+      - src/test/cygwin.ps1
+      - src/util/build.sh
+      - Makefile
+      - appveyor.yml
+
   environment:
     matrix:
       - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
