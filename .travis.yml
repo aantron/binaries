@@ -13,6 +13,8 @@ matrix:
       env: SYSTEM=macports COMPILER=4.02
     - os: osx
       env: SYSTEM=macports COMPILER=4.01
+    - os: osx
+      env: SYSTEM=macports COMPILER=4.03
 
 script:
   - make
