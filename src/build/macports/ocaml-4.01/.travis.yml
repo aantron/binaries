@@ -1,0 +1,55 @@
+language: generic
+
+os: osx
+
+before_script:
+  # Install a patched MacPorts (see https://trac.macports.org/ticket/42725).
+  - wget https://distfiles.macports.org/MacPorts/MacPorts-2.3.4.tar.bz2
+  - tar xf MacPorts-2.3.4.tar.bz2
+  - cd MacPorts-2.3.4
+  - patch -p1 < ../pkg.patch
+  - ./configure
+  - make
+  - sudo make install
+  - cd ..
+  - export PATH=/opt/local/bin:$PATH
+  - which port
+  - sudo port selfupdate
+
+  # Set up a development Portfile repository.
+  - echo "file://`pwd`" > sources.conf
+  - cat /opt/local/etc/macports/sources.conf >> sources.conf
+  - cat sources.conf
+  - sudo cp sources.conf /opt/local/etc/macports/
+  - portindex
+  - cat .travis.yml lang/ocaml/Portfile pkg.patch
+  - port info ocaml
+
+script:
+  # Package OCaml.
+  - sudo port mpkg ocaml | cat
+
+  # Do a basic test.
+  - sudo port uninstall --follow-dependents --follow-dependencies ocaml || true
+  - sudo port uninstall --follow-dependents --follow-dependencies ncurses || true
+  - sudo installer -pkg `port work ocaml`/ocaml-4.01.0.mpkg -target /
+  - which ocaml | grep opt/local/
+  - ocaml -version | grep 4.01.0
+
+  # Prepare the package file for deployment.
+  - mkdir deploy
+  - sudo mv `port work ocaml`/ocaml-4.01.0.mpkg deploy/ocaml-4.01.0.pkg
+  - file deploy/ocaml-4.01.0.pkg | grep -iv directory
+
+deploy:
+  provider: s3
+  region: us-west-2
+  bucket: ocaml-binaries
+  access_key_id: AKIAI6MHNPRFA24G7URA
+  secret_access_key:
+    secure: obE1CaQ209gHfaKWS3/P9xoGtagXhcps4ZVR9hDlrj4DQ/KQszYB+P+Iup1Y0hb7rTkit/jRV/brLMlEWRWUPpsU+PviqKL+dOPxnQ9Z+IJLJ9JV1te/NhMMsW2GLc5KVGekTr7JBc0NFf8Hdbk/ThtVHmE1yUmDuqwvoA0Jq3tMW1HJl0dJqiKuuHJ3D+vEY8OjKB9ajoE7fb6qoOHvHFAFhmBynko5b8MloHxXPMrS3RsT5nEskM58Q9OWk3ycuWgF8O1ZASRL2mQbdwB9iNZlHzE3VOYOGvNv4BDZOBCanUBbymQyU2/1ZL4hjHlwkF52e+LaW5pfT0OqMYvhcbI9BixCrNqadSN3hTs4s+YE2oxXtKuH30hit5RI0ZEZ2ODvAwNgICIEojNahAvztCUcVuTz1sa0JldBoFprjsCvLw93AR7Dm6Ack6pMqJB6GDytjSCi+pjDN9K7w8x0LhkTfL5PZTvxTjjAlYYdPFa6Na8f40xe250EDc/uHF96+1mXFGO7hnD/2NujwZ4JEa+HKUIGXrXut+P+LtTM1t4StMH2GFIUdh5TCR2xP+/uzIEM2JiN8ysCt1N+u70cLhOBrLfQDb92TApVNjE10LjkCjS/OH5AnCpoiruAyzW+noXdhAKqW+gNDh4j4j+OPFmHhFOoHoXtLwbWnY2gX4o=
+  skip_cleanup: true
+  local_dir: deploy
+  upload_dir: $TRAVIS_COMMIT
+  on:
+    branch: build-macports-ocaml-4.01

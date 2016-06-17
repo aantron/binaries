@@ -11,6 +11,8 @@ matrix:
     - os: osx
       osx_image: beta-xcode6.1
       env: SYSTEM=macports COMPILER=4.02
+    - os: osx
+      env: SYSTEM=macports COMPILER=4.01
 
 script:
   - make
