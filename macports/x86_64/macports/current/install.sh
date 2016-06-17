@@ -15,8 +15,13 @@ case $(sw_vers -productVersion) in
         exit 1;;
 esac
 
-1>&2 wget -O macports.pkg "$URL"
-1>&2 sudo installer -pkg macports.pkg -target /
+TEMP_DIRECTORY=$(mktemp -d -t ocaml-binaries)
+trap 'rm -rf "$TEMP_DIRECTORY"' EXIT
+
+FILE="$TEMP_DIRECTORY/macports.pkg"
+
+1>&2 wget -O $FILE "$URL"
+1>&2 sudo installer -pkg $FILE -target /
 
 export PATH=/opt/local/bin:$PATH
 
