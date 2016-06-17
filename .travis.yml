@@ -29,3 +29,4 @@ script:
   - eval `opam config env`
   - opam install -y ocamlfind
   - opam install -y type_conv
+  - ls

@@ -23,7 +23,7 @@ touch $DEPLOY_DIR/.nojekyll
 
 (cd $DEPLOY_DIR && \
     git add -A && \
-    git commit -m "$MESSAGE" && \
+    git commit --allow-empty -m "$MESSAGE" && \
     git push)
 
 # Commit appveyor.yml in branch deploy to trigger a self-test.
@@ -31,6 +31,7 @@ touch $DEPLOY_DIR/.nojekyll
     git checkout deploy)
 
 cp appveyor.yml $DEPLOY_DIR/
+cp src/util/deploy.travis.yml $DEPLOY_DIR/.travis.yml
 if [ -n "$SUBDIRECTORY" ]
 then
     echo $SUBDIRECTORY > $DEPLOY_DIR/subdirectory
@@ -38,10 +39,9 @@ else
     echo / > $DEPLOY_DIR/subdirectory
 fi
 
-# Make sure git doesn't claim there is "nothing to commit."
 date > $DEPLOY_DIR/timestamp
 
 (cd $DEPLOY_DIR && \
     git add -A && \
-    git commit -m "$MESSAGE" && \
+    git commit --allow-empty -m "$MESSAGE" && \
     git push)
