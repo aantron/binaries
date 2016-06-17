@@ -1,0 +1,43 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+# $Id$
+
+# Based on 4.02.2 Portfile in MacPorts SVN:
+# https://trac.macports.org/browser/trunk/dports/lang/ocaml-camlp4/Portfile?rev=148027
+
+PortSystem          1.0
+PortGroup           ocaml 1.0
+PortGroup           github 1.0
+
+github.setup        ocaml camlp4 4.02+7
+name                ocaml-camlp4
+version             [string map {+ -} ${version}]
+revision            1
+categories          lang devel ml
+maintainers         mww openmaintainer
+license             {LGPL-2.1 OpenSSLException}
+description         Caml Preprocessor and Pretty-Printer
+long_description    \
+    Camlp4 is a software system for writing extensible parsers for programming \
+    languages. It provides a set of OCaml libraries that are used to define \
+    grammars as well as loadable syntax extensions of such grammars. Camlp4 \
+    stands for Caml Preprocessor and Pretty-Printer and one of its most \
+    important applications is the definition of domain-specific extensions of \
+    the syntax of OCaml. \
+    Camlp4 was part of the official OCaml distribution until its version \
+    4.01.0. Since then it has been replaced by a simpler system which is \
+    easier to maintain and to learn: ppx rewriters and extension points.
+
+platforms           darwin
+
+checksums           rmd160  359b5ce77a592b84839493294b40a29df3e721b0 \
+                    sha256  082f8cdc1b1068f9cf9b1f521fc70de6c9500d28e26572cb4968043c99dc6555
+
+configure.pre_args  --bindir=${prefix}/bin --libdir=${prefix}/lib/ocaml --pkgdir=${ocamlfind_dir}
+
+use_parallel_build  no
+
+destroot.target     install install-META
+destroot.destdir    BINDIR=${destroot}${prefix}/bin \
+                    LIBDIR=${destroot}${prefix}/lib/ocaml \
+                    MANDIR=${destroot}${prefix}/share/man \
+                    PKGDIR=${destroot}${ocamlfind_dir}

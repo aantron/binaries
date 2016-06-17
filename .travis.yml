@@ -17,8 +17,11 @@ script:
   - eval `bash _build/$SYSTEM/x86_64/$SYSTEM/current/install.sh`
   - bash _build/$SYSTEM/x86_64/ocaml/$COMPILER/install.sh
   - ocaml -version | grep $COMPILER
+  - bash _build/$SYSTEM/x86_64/camlp4/$COMPILER/install.sh
+  - camlp4 -version | grep $COMPILER
   - bash _build/$SYSTEM/x86_64/opam/1.2/install.sh
   - opam --version
   - opam init -y --auto-setup
   - eval `opam config env`
   - opam install -y ocamlfind
+  - opam install -y type_conv
