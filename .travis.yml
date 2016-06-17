@@ -24,6 +24,6 @@ script:
   - 'echo "Subdirectory: $SUBDIRECTORY"'
   - PACKAGE_MANAGER_URL=https://aantron.github.io/binaries/$SUBDIRECTORY/$SYSTEM/x86_64/$SYSTEM/current/install.sh
   - PACKAGE_URL=https://aantron.github.io/binaries/$SUBDIRECTORY/$SYSTEM/x86_64/$PACKAGE/$VERSION/install.sh
-  - 'if [ "$INSTALL" == "no" ] ; then ; wget -q -O /dev/null $PACKAGE_MANAGER_URL ; else ; eval `wget -q -O - $PACKAGE_MANAGER_URL | bash` ; fi'
-  - 'if [ "$INSTALL" == "no" ] ; then ; wget -q -O /dev/null $PACKAGE_URL ; else ; wget -q -O - $PACKAGEURL | bash ; fi'
+  - 'if [ "$INSTALL" == "no" ] ; then wget -q -O /dev/null $PACKAGE_MANAGER_URL ; else eval `wget -q -O - $PACKAGE_MANAGER_URL | bash` ; fi'
+  - 'if [ "$INSTALL" == "no" ] ; then wget -q -O /dev/null $PACKAGE_URL ; else wget -q -O - $PACKAGEURL | bash ; fi'
   - ls
