@@ -69,10 +69,10 @@ function Run-CygwinSetup {
 
     # See https://github.com/aantron/binaries/commit/6a4c4ec4291de4771a7b08a5d5ef42d7be28c38d.
     if ("-L" -in $args) {
-        $timeout = 15
+        $timeout = 30
     }
     else {
-        $timeout = 30
+        $timeout = 60
     }
 
     # Cygwin64's setup.exe is considerably slower than Cygwin32's.
