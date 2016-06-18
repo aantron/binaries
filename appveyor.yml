@@ -1,0 +1,11 @@
+version: "debug-{build}"
+
+build_script:
+  - cat appveyor.yml
+  - echo foo
+  - ps: '& "echo" "foo"'
+  - ps: iex "echo foo"
+  - cmd /c start /wait C:\Cygwin\setup-x86.exe -q
+  - C:\Cygwin\setup-x86.exe -q
+  - ps: '& "C:\Cygwin\setup-x86.exe" "-q"'
+  - ps: iex "C:\Cygwin\setup-x86.exe -q"
