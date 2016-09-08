@@ -10,7 +10,7 @@ then
 else
     >&2 echo "This script expects a path of the form"
     >&2 echo
-    >&2 echo "  PREFIX/cygwin/ARCH-PACKAGE-VERSION.ps1.in"
+    >&2 echo "  PREFIX/cygwin/ARCH-PACKAGE-VERSION.in.ps1"
     >&2 echo
     >&2 echo "as argument"
     exit 1
