@@ -42,15 +42,17 @@
 
   environment:
     matrix:
-      # - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.03}
-      # - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.02}
-      # - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.01}
-      # - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
-      # - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.02}
-      # - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2}
-      # - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.02, INSTALL: no}
-      # - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.01, INSTALL: no}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.02}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.01}
+      - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
+      - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.02}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.02, INSTALL: no}
+      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.01, INSTALL: no}
       - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
+      - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: opam, VERSION: 1.2, INSTALL: no}
+      - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: camlp4, VERSION: 4.03, INSTALL: no}
 
   build_script:
     - SET /p SUBDIRECTORY=< subdirectory
