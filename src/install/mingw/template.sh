@@ -17,13 +17,12 @@ else
 fi
 
 echo '$arch' = "\"$ARCH\""
-echo '$package' = "\"dummy\""
 
 echo
 echo
 echo
 
-cat src/install/cygwin/common.frag.ps1
+cat src/install/windows_common.frag.ps1
 
 echo
 echo

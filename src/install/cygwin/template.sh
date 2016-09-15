@@ -30,6 +30,12 @@ echo
 echo
 echo
 
+cat src/install/windows_common.frag.ps1
+
+echo
+echo
+echo
+
 cat src/install/cygwin/common.frag.ps1
 
 echo
