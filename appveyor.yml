@@ -1,65 +1,22 @@
 -
-  branches:
-    except:
-      - deploy
-      - /build-.*/
-
   version: "test-{build}"
 
   shallow_clone: true
 
-  only_commits:
-    files:
-      - src/install/cygwin/**/*
-      - src/install/mingw/**/*
-      - src/test/*.ps1
-      - src/util/build.sh
-      - Makefile
-      - appveyor.yml
-
-  environment:
-    matrix:
-      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
-      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.02}
-      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.01}
-      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.03}
-      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.02}
-      - {SYSTEM: mingw, ARCH: x86_64, COMPILER: 4.03}
+  install:
+    - appveyor DownloadFile "https://raw.githubusercontent.com/Chris00/ocaml-appveyor/master/install_ocaml.cmd" -FileName "C:\install_ocaml.cmd"
+    - C:\install_ocaml.cmd
+    - cd "%APPVEYOR_BUILD_FOLDER%"
 
   build_script:
-    - C:\Cygwin64\bin\bash -lc "make -C /cygdrive/c/projects/binaries build"
-    - ps: '& ".\src\test\$env:SYSTEM.ps1"'
+    - echo %LIB%
+    - 'C:\Cygwin\bin\bash -lc "echo $LIB"'
+    - SET FOO=BAR
+    - echo %FOO%
+    - 'C:\Cygwin\bin\bash -lc "echo $FOO"'
+    - echo let () = print_endline "hello world" > foo.ml
     - ls
-
--
-  branches:
-    only:
-      - deploy
-
-  version: "deploy-{build}"
-
-  shallow_clone: true
-
-  environment:
-    matrix:
-      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.03}
-      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.02}
-      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: ocaml, VERSION: 4.01}
-      - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
-      - {SYSTEM: cygwin, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.02}
-      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: opam, VERSION: 1.2}
-      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.02, INSTALL: no}
-      - {SYSTEM: cygwin, ARCH: x86, PACKAGE: camlp4, VERSION: 4.01, INSTALL: no}
-      - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
-      - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: opam, VERSION: 1.2, INSTALL: no}
-      - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: camlp4, VERSION: 4.03, INSTALL: no}
-
-  build_script:
-    - SET /p SUBDIRECTORY=< subdirectory
-    - SET /p DEPLOY_TIME=< timestamp
-    - 'echo Commit timestamp: %APPVEYOR_REPO_COMMIT_TIMESTAMP%'
-    - 'echo Deploy timestamp: %DEPLOY_TIME%'
-    - 'echo Subdirectory: %SUBDIRECTORY%'
-    - 'SET URL=https://aantron.github.io/binaries/%SUBDIRECTORY%/%SYSTEM%/%ARCH%/%PACKAGE%/%VERSION%/install.ps1'
-    - ps: 'if ($env:INSTALL -eq "no") { (new-object net.webclient).DownloadString($env:URL) > $null } else { (new-object net.webclient).DownloadString($env:URL) | PowerShell -Command - }'
+    - cat foo.ml
+    - ocamlopt foo.ml
+    - .\camlprog.exe
     - ls
