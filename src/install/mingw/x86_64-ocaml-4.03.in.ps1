@@ -5,7 +5,7 @@ Run-CygwinSetup -P patch -P unzip
 
 Run "Invoke-WebRequest '$archive' -OutFile '$archive_name'"
 
-$working_directory = iex "$bash -lc `"cygpath -au '$working_directory'`""
+$working_directory = iex "$bash -lc `"/usr/bin/cygpath -au '$working_directory'`""
 
 Run-Bash "cd $working_directory && tar -xf opam64.tar.xz"
 Run-Bash "cd $working_directory && bash opam64/install.sh"
