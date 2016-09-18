@@ -1,0 +1,37 @@
+version: "build-{build}"
+
+environment:
+  matrix:
+    - ARCH: x86
+      CYGWIN: C:\Cygwin
+      CYGSH: C:\Cygwin\bin\bash -lc
+
+build_script:
+  - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
+
+  # Be explicit about which commit of ocaml-binaries we are using to build.
+  - git checkout 660a34157edc99444bb41cb9fab4649f9cb009e5
+  - "%CYGSH% 'make -C /cygdrive/c/projects/binaries build'"
+  - ps: '& ".\_build\msvc\x86_64\ocaml\4.03\install.ps1"'
+  - ps: '& ".\_build\msvc\x86_64\opam\1.2\install.ps1"'
+  - "%CYGSH% 'opam init -y --auto-setup'"
+  - git clean -ffd
+
+  # Install OCamlbuild
+  - "%CYGSH% 'opam install -y ocamlbuild'"
+
+  # Build Camlp4.
+  - git checkout %APPVEYOR_REPO_COMMIT%
+  - "%CYGSH% 'cd /cygdrive/c/projects/binaries ; ./build.sh'"
+
+  # Show the build files.
+  - cat appveyor.yml
+  - cat build.sh
+
+on_finish:
+  - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
+artifacts:
+  - name: camlp4
+    path: packages
+    type: zip
