@@ -96,11 +96,6 @@ function Run-CygwinSetup {
 # captured later.
 Run-Bash "true"
 
-# Settle on a package name.
-if (-not (Test-Path variable:script:package)) {
-    $package = $inferred_package
-}
-
 # Working directory.
 $working_directory = "$env:TEMP\ocaml-binaries"
 
@@ -109,6 +104,13 @@ if (Test-Path $working_directory) {
 }
 
 md $working_directory > $null
+
+
+
+# Settle on a package name.
+if (-not (Test-Path variable:script:package)) {
+    $package = $inferred_package
+}
 
 # Package installation.
 function Install-Package {

@@ -96,11 +96,6 @@ function Run-CygwinSetup {
 # captured later.
 Run-Bash "true"
 
-# Settle on a package name.
-if (-not (Test-Path variable:script:package)) {
-    $package = $inferred_package
-}
-
 # Working directory.
 $working_directory = "$env:TEMP\ocaml-binaries"
 
@@ -109,6 +104,13 @@ if (Test-Path $working_directory) {
 }
 
 md $working_directory > $null
+
+
+
+# Settle on a package name.
+if (-not (Test-Path variable:script:package)) {
+    $package = $inferred_package
+}
 
 # Package installation.
 function Install-Package {
@@ -127,7 +129,7 @@ function Install-Package {
 $aspcud_archive = "http://downloads.sourceforge.net/project/potassco/aspcud/1.9.1/aspcud-1.9.1-win64.zip"
 
 $aspcud_archive_filename = "$working_directory\aspcud.zip"
-$aspcud_archive_filename_cygwin = iex "$bash -lc `"cygpath -au '$aspcud_archive_filename'`""
+$aspcud_archive_filename_cygwin = iex "$bash -lc `"/usr/bin/cygpath -au '$aspcud_archive_filename'`""
 $aspcud_extracted = "$working_directory\aspcud"
 # Use Cygwin wget, because Invoke-WebRequest doesn't seem to follow
 # SourceForge's meta refresh.

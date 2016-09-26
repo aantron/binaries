@@ -1,11 +1,4 @@
-$archive = "https://ci.appveyor.com/api/buildjobs/k3qrn23xsqt9rkep/artifacts/packages-ocaml-camlp4.zip"
-$package = "ocaml-camlp4"
-
-
-
 $arch = "x86"
-$inferred_package = "camlp4"
-$version = "4.02"
 
 
 
@@ -108,27 +101,20 @@ md $working_directory > $null
 
 
 
-# Settle on a package name.
-if (-not (Test-Path variable:script:package)) {
-    $package = $inferred_package
-}
+$archive_remote = "https://github.com/Chris00/ocaml-appveyor/releases/download/0.1/ocaml-4.03.zip"
+$archive_local = "$working_directory\ocaml-4.03.zip"
 
-# Package installation.
-function Install-Package {
-    $archive_name = "$working_directory\packages-$package.zip"
-    $packages_path = "$working_directory\packages-$package"
+$ocaml_path = "C:\Program Files\OCaml"
 
-    Run "Invoke-WebRequest '$archive' -OutFile '$archive_name'"
-    Run "Expand-Archive '$archive_name' '$packages_path'"
+Run "Invoke-WebRequest '$archive_remote' -OutFile '$archive_local'"
+Run "Expand-Archive '$archive_local' 'C:\Program Files'"
 
-    Run-CygwinSetup -L -l $packages_path -P $package
-}
+$env:PATH += ";$ocaml_path\bin;$ocaml_path\bin\flexdll"
+$env:CAML_LD_LIBRARY_PATH = "$ocaml_path\lib\stublibs"
 
+[System.Environment]::SetEnvironmentVariable(
+    "PATH", $env:PATH + ";$ocaml_path\bin;$ocaml_path\bin\flexdll", "Machine")
+[System.Environment]::SetEnvironmentVariable(
+    "CAML_LD_LIBRARY_PATH", "$ocaml_path\lib\stublibs", "Machine")
 
-
-echo "Camlp4: checking for compatible OCaml version"
-Run-Bash "ocaml -version | grep $version"
-
-Install-Package
-
-Run-Bash "camlp4o -version | grep $version"
+Add-Content C:\Cygwin\home\appveyor\.bash_profile 'export PATH="/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 10.0/VC/Bin/amd64":$PATH'
