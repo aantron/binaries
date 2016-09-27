@@ -8,7 +8,7 @@ function CheckExitCode_ {
 }
 
 # Cygwin shell.
-$private:bash = "C:\Cygwin\bin\bash"
+$private:bash = "C:\Cygwin64\bin\bash"
 
 function Install($package, $version) {
     $private:script =
@@ -23,5 +23,11 @@ Install "opam" "1.2"
 
 # Install "camlp4" "4.03"
 
-& $bash "-lc" 'opam init -y --auto-setup'
-& $bash "-lc" 'opam install -y ocamlfind'
+echo "PATH:"
+& $bash "-lc" "echo `$PATH"
+echo "LIB:"
+& $bash "-lc" "echo `$LIB"
+echo "LIBPATH:"
+& $bash "-lc" "echo `$LIBPATH"
+
+& $bash "-lc" 'opam install -y ocamlfind --verbose'

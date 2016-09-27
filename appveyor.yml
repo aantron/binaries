@@ -19,12 +19,12 @@
 
   environment:
     matrix:
-      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
-      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.02}
-      - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.01}
-      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.03}
-      - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.02}
-      - {SYSTEM: mingw, ARCH: x86_64, COMPILER: 4.03}
+      # - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.03}
+      # - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.02}
+      # - {SYSTEM: cygwin, ARCH: x86, COMPILER: 4.01}
+      # - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.03}
+      # - {SYSTEM: cygwin, ARCH: x86_64, COMPILER: 4.02}
+      # - {SYSTEM: mingw, ARCH: x86_64, COMPILER: 4.03}
       - {SYSTEM: msvc, ARCH: x86_64, COMPILER: 4.03}
 
   install:
@@ -34,6 +34,9 @@
     - C:\Cygwin64\bin\bash -lc "make -C /cygdrive/c/projects/binaries build"
     - ps: '& ".\src\test\$env:SYSTEM.ps1"'
     - ls
+
+  on_finish:
+    - ps: $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
 
 -
   branches:

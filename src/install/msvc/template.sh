@@ -16,7 +16,7 @@ else
     exit 1
 fi
 
-echo '$arch' = "\"x86\""
+echo '$arch' = "\"$ARCH\""
 
 echo
 echo
@@ -29,26 +29,3 @@ echo
 echo
 
 cat $1
-
-if [ "$PACKAGE" = "opam" ]
-then
-    echo
-    echo
-    echo
-
-    echo '$inferred_package' = "\"$PACKAGE\""
-    echo '$version' = "\"$VERSION\""
-
-    echo
-    echo
-    echo
-
-    cat src/install/cygwin/common.frag.ps1
-
-    echo
-    echo
-    echo
-
-    PACKAGE_SCRIPT=src/install/cygwin/$PACKAGE.frag.ps1
-    cat $PACKAGE_SCRIPT
-fi
