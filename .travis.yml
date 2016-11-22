@@ -16,6 +16,8 @@ matrix:
     - os: osx
       env: SYSTEM=macports COMPILER=4.03
 
+  fash_finish: true
+
 script:
   - make
   - eval `bash _build/$SYSTEM/x86_64/$SYSTEM/current/install.sh`

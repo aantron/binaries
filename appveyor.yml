@@ -27,6 +27,9 @@
       - {SYSTEM: mingw, ARCH: x86_64, COMPILER: 4.03}
       - {SYSTEM: msvc, ARCH: x86_64, COMPILER: 4.03}
 
+  matrix:
+    fast_finish: true
+
   install:
     - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
 
