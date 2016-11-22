@@ -1,0 +1,100 @@
+See https://trac.macports.org/ticket/42725.
+--- MacPorts-2.3.4.orig/src/package1.0/portpkg.tcl	2014-01-27 09:23:40.000000000 -0600
++++ MacPorts-2.3.4/src/package1.0/portpkg.tcl	2016-06-16 11:54:11.000000000 -0500
+@@ -148,73 +148,29 @@
+         }
+     }
+ 
+-    if ([file exists "$packagemaker"]) {
+-
+-        ui_debug "Calling $packagemaker for $portname pkg"
+-        if {${os.major} >= 9} {
+-            if {${package.flat}} {
+-                set pkgtarget "10.5"
+-                set pkgresources " --scripts ${package.scripts}"
+-                set infofile "${workpath}/PackageInfo"
+-                write_package_info $infofile
+-            } else {
+-                set pkgtarget "10.3"
+-                set pkgresources " --resources ${package.resources} --title \"$portname-$portversion\""
+-                set infofile "${workpath}/Info.plist"
+-                write_info_plist $infofile $portname $portversion $portrevision
+-            }
+-            set cmdline "PMResourceLocale=${language} $packagemaker --root ${destpath} --out ${pkgpath} ${pkgresources} --info $infofile --target $pkgtarget --domain system --id org.macports.$portname"
+-            if {${os.major} >= 10} {
+-                set v [mp_version_to_apple_version $portepoch $portversion $portrevision]
+-                append cmdline " --version $v"
+-                append cmdline " --no-relocate"
+-            } else {
+-                # 10.5 Leopard does not use current language, manually specify
+-                append cmdline " -AppleLanguages \"(${language})\""
+-            }
+-            ui_debug "Running command line: $cmdline"
+-            system $cmdline
+-
+-            if {${package.flat} && ${os.major} >= 10} {
+-                # the package we just built is just a component
+-                set componentpath "[file rootname ${pkgpath}]-component.pkg"
+-                file rename -force ${pkgpath} ${componentpath}
+-                # Generate a distribution
+-                set productbuild [findBinary productbuild]
+-                set cmdline "$productbuild --resources ${package.resources} --identifier org.macports.${portname} --distribution ${workpath}/Distribution --package-path ${package.destpath} ${pkgpath}"
+-                ui_debug "Running command line: $cmdline"
+-                system $cmdline
+-            }
+-        } else {
+-            write_info_plist ${workpath}/Info.plist $portname $portversion $portrevision
+-            write_description_plist ${workpath}/Description.plist $portname $portversion $description
+-            system "$packagemaker -build -f ${destpath} -p ${pkgpath} -r ${package.resources} -i ${workpath}/Info.plist -d ${workpath}/Description.plist"
+-        }
+-
+-        file delete ${workpath}/Info.plist \
+-                    ${workpath}/PackageInfo \
+-                    ${workpath}/Distribution \
+-                    ${workpath}/Description.plist
+-        file delete -force ${package.resources} \
+-                           ${package.scripts}
+-
+-    } else {
+-
+-        file mkdir ${pkgpath}/Contents/Resources
+-        foreach f [glob -directory ${package.resources} *] {
+-            file copy -force -- $f ${pkgpath}/Contents/Resources
+-        }
+-
+-        write_PkgInfo ${pkgpath}/Contents/PkgInfo
+-        write_info_plist ${pkgpath}/Contents/Info.plist $portname $portversion $portrevision
+-
+-        system "[findBinary mkbom $portutil::autoconf::mkbom_path] ${destpath} ${pkgpath}/Contents/Archive.bom"
+-        system "cd ${destpath} && [findBinary pax $portutil::autoconf::pax_path] -x cpio -w -z . > ${pkgpath}/Contents/Archive.pax.gz"
+-
+-        write_description_plist ${pkgpath}/Contents/Resources/Description.plist $portname $portversion $description
+-        write_sizes_file ${pkgpath}/Contents/Resources/Archive.sizes ${pkgpath} ${destpath}
+-
+-    }
++    set pkgbuild [findBinary pkgbuild]
++    set v [mp_version_to_apple_version $portepoch $portversion $portrevision]
++    set cmdline "$pkgbuild --root ${destpath} --scripts ${package.scripts} --identifier org.macports.$portname --version $v ${pkgpath}"
++    set infofile "${workpath}/PackageInfo"
++    write_package_info $infofile
++    ui_debug "Running command line: $cmdline"
++    system $cmdline
++
++    # the package we just built is just a component
++    set componentpath "[file rootname ${pkgpath}]-component.pkg"
++    file rename -force ${pkgpath} ${componentpath}
++    # Generate a distribution
++    set productbuild [findBinary productbuild]
++    set cmdline "$productbuild --resources ${package.resources} --identifier org.macports.${portname} --distribution ${workpath}/Distribution --package-path ${package.destpath} ${pkgpath}"
++    ui_debug "Running command line: $cmdline"
++    system $cmdline
++
++    file delete ${workpath}/Info.plist \
++                ${workpath}/PackageInfo \
++                ${workpath}/Distribution \
++                ${workpath}/Description.plist
++    file delete -force ${package.resources} \
++                       ${package.scripts}
+ 
+     foreach dir {etc var tmp} {
+         if ([file exists "${destpath}/private/$dir"]) {

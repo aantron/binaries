@@ -1,0 +1,64 @@
+# $Id$
+
+# Based on 4.02.2 Portfile in MacPorts SVN.
+# https://trac.macports.org/browser/trunk/dports/lang/ocaml/Portfile
+# https://trac.macports.org/changeset/139469
+
+PortSystem          1.0
+
+name                ocaml
+version             4.04.0
+categories          lang ml
+maintainers         nomaintainer
+description         OCaml is an implementation of the ML language
+long_description    OCaml is an implementation of the ML language, based on \
+                    the Caml Light dialect extended with a complete \
+                    class-based object system and a powerful module system in \
+                    the style of Standard ML.
+homepage            http://www.ocaml.org/
+platforms           darwin
+supported_archs     x86_64
+license             {QPL LGPL}
+
+depends_lib         port:ncurses
+
+livecheck.type      regex
+livecheck.url       http://caml.inria.fr/download.en.html
+livecheck.regex     "ocaml-\[0-9\.]+/ocaml-(\[0-9\.\]+).tar"
+
+# Fetch phase.
+set major_vers      [join [lrange [split ${version} .] 0 1] .]
+master_sites        http://caml.inria.fr/pub/distrib/ocaml-${major_vers}/
+
+# Checksum phase.
+checksums           rmd160  ff04082b95fbc0a4397ad20a50d80c5cd77418ec \
+                    sha256  64ed6dad2316d5dff7440cea89f0f0abe07ce508b9104d1bfadf3782e79856b4
+
+# Extract phase.
+use_xz              yes
+
+# No patch phase.
+
+# Configure phase.
+configure.pre_args  -prefix ${prefix}
+configure.args      -cc ${configure.cc} -as \"${configure.cc} -c\" -aspp \"${configure.cc} -c\" \ -no-graph
+universal_variant   no
+
+# Build phase.
+build.cmd           "unset LD_PREBIND LD_PREBIND_ALLOW_OVERLAP && ${build.cmd}"
+build.target        world.opt
+use_parallel_build  no
+
+# No test phase.
+
+# Install phase.
+destroot.destdir    BINDIR=${destroot}${prefix}/bin \
+                    LIBDIR=${destroot}${prefix}/lib/ocaml \
+                    MANDIR=${destroot}${prefix}/share/man
+set docdir          ${prefix}/share/doc/${name}
+post-destroot {
+    # Change "ld.conf" to remove ${destroot} in paths.
+    reinplace "s:${destroot}::g" ${destroot}${prefix}/lib/ocaml/ld.conf
+    xinstall -d ${destroot}${docdir}
+    xinstall -m 0644 -W ${worksrcpath} Changes LICENSE README.adoc ${destroot}${docdir}
+}
