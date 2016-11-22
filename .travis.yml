@@ -32,3 +32,10 @@ script:
   - opam install -y ocamlfind
   - opam install -y type_conv
   - ls
+
+notifications:
+  email:
+    recipients:
+      - antonbachin@yahoo.com
+    on_success: always
+    on_failure: always
