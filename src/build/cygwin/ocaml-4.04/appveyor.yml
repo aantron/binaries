@@ -1,0 +1,22 @@
+version: "cygwin-{build}"
+
+shallow_clone: true
+
+environment:
+  matrix:
+    - ARCH: x86
+      CYGWIN: C:\Cygwin
+      CYGSH: C:\Cygwin\bin\bash -lc
+    - ARCH: x86_64
+      CYGWIN: C:\Cygwin64
+      CYGSH: C:\Cygwin64\bin\bash -lc
+
+build_script:
+  - "%CYGWIN%\\setup-%ARCH%.exe -q -P cygport"
+  - ps: '(new-object net.webclient).DownloadString("https://aantron.github.io/binaries/cygwin/$env:ARCH/flexdll/0.35/install.ps1") | PowerShell -Command -'
+  - "%CYGSH% 'cd /cygdrive/c/projects/binaries ; ./build.sh'"
+
+artifacts:
+  - name: packages-ocaml
+    path: packages
+    type: zip

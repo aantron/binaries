@@ -1,0 +1,73 @@
+Adapted from the ocaml-4.02.3-2 package in Cygwin.
+
+--- origsrc/ocaml-4.04.0/asmrun/Makefile	2016-06-03 10:20:28.000000000 -0500
++++ src/ocaml-4.04.0/asmrun/Makefile	2016-06-03 10:30:19.000000000 -0500
+@@ -79,16 +79,17 @@
+ 
+ all-noshared:
+ 
+-all-shared: libasmrun_pic.a libasmrun_shared.so
++all-shared: libasmrun_pic.a libasmrun_shared.dll.a
+ 
+ libasmrun_pic.a: $(PICOBJS)
+ 	rm -f libasmrun_pic.a
+ 	$(ARCMD) rc libasmrun_pic.a $(PICOBJS)
+ 	$(RANLIB) libasmrun_pic.a
+ 
+-libasmrun_shared.so: $(PICOBJS)
+-	$(MKDLL) -o libasmrun_shared.so $(PICOBJS) $(NATIVECCLIBS)
++libasmrun_shared.dll.a: $(PICOBJS)
++	$(MKDLL) -o cygasmrun_shared.dll -link -Wl,--out-implib,$@ $(PICOBJS) $(NATIVECCLIBS)
+ 
++INSTALL_BINDIR=$(DESTDIR)$(BINDIR)
+ INSTALL_LIBDIR=$(DESTDIR)$(LIBDIR)
+ 
+ install::
+@@ -122,7 +123,8 @@
+ install::
+ 	cp libasmrun_pic.a $(INSTALL_LIBDIR)/libasmrun_pic.a
+ 	cd $(INSTALL_LIBDIR); $(RANLIB) libasmrunp.a
+-	cp libasmrun_shared.so $(INSTALL_LIBDIR)/libasmrun_shared.so
++	cp cygasmrun_shared.dll $(INSTALL_BINDIR)/cygasmrun_shared.dll
++	cp libasmrun_shared.dll.a $(INSTALL_LIBDIR)/libasmrun_shared.dll.a
+ endif
+ 
+ main.c: ../byterun/main.c
+--- origsrc/ocaml-4.04.0/byterun/Makefile	2016-06-03 10:31:35.000000000 -0500
++++ src/ocaml-4.04.0/byterun/Makefile	2016-06-03 10:35:39.000000000 -0500
+@@ -52,15 +52,15 @@
+ all-noshared:
+ .PHONY: all-noshared
+ 
+-all-shared: libcamlrun_pic.a libcamlrun_shared.so
++all-shared: libcamlrun_pic.a libcamlrun_shared.dll.a
+ .PHONY: all-shared
+ 
+ libcamlrun_pic.a: $(PICOBJS)
+ 	$(ARCMD) rc libcamlrun_pic.a $(PICOBJS)
+ 	$(RANLIB) libcamlrun_pic.a
+ 
+-libcamlrun_shared.so: $(PICOBJS)
+-	$(MKDLL) -o libcamlrun_shared.so $(PICOBJS) $(BYTECCLIBS)
++libcamlrun_shared.dll.a: $(PICOBJS)
++	$(MKDLL) -o cygcamlrun_shared.dll -link -Wl,--out-implib,$@ $(PICOBJS) $(BYTECCLIBS)
+ 
+ install:: install-$(SHARED)
+ 
+@@ -68,13 +68,14 @@
+ .PHONY: install-noshared
+ 
+ install-shared:
+-	cp libcamlrun_shared.so "$(INSTALL_LIBDIR)/libcamlrun_shared.so"
++	cp cygcamlrun_shared.dll "$(INSTALL_BINDIR)/cygcamlrun_shared.dll"
++	cp libcamlrun_shared.dll.a "$(INSTALL_LIBDIR)/libcamlrun_shared.dll.a"
+ 	cp libcamlrun_pic.a "$(INSTALL_LIBDIR)/libcamlrun_pic.a"
+ 	cd "$(INSTALL_LIBDIR)"; $(RANLIB) libcamlrun_pic.a
+ .PHONY: install-shared
+ 
+ clean::
+-	rm -f libcamlrun_shared.so libcamlrun_pic.a
++	rm -f cygcamlrun_shared.dll libcamlrun_shared.dll.a libcamlrun_pic.a
+ 
+ %.d.o: %.c
+ 	$(CC) -c $(DFLAGS) $< -o $@
