@@ -47,5 +47,4 @@ Run-Bash "aspcud -v | grep `"1\\.9`""
 
 # Install OPAM.
 Install-Package
-
 Run-Bash "opam --version | grep $version"

@@ -1,0 +1,86 @@
+Taken from
+https://raw.githubusercontent.com/cygwinports/flexdll/master/0.34-cygwin.patch
+and slightly modified.
+
+--- origsrc/flexdll-0.35/Makefile	2015-01-22 07:01:06.000000000 -0600
++++ src/flexdll-0.35/Makefile	2015-11-29 13:10:56.931451600 -0600
+@@ -18,6 +18,8 @@ CYG64CC = $(CYGWIN64_PREFIX)-gcc
+ .PHONY: version.ml
+ version.ml:
+ 	echo "let version = \"$(VERSION)\"" > version.ml
++	echo "let cygwin_prefix = \"$(CYGWIN_PREFIX)\"" >> version.ml
++	echo "let cygwin64_prefix = \"$(CYGWIN64_PREFIX)\"" >> version.ml
+ 	echo "let mingw_prefix = \"$(MINGW_PREFIX)\"" >> version.ml
+ 	echo "let mingw64_prefix = \"$(MINGW64_PREFIX)\"" >> version.ml
+ 
+--- origsrc/flexdll-0.35/reloc.ml 2016-11-22 17:40:15.000000000 -0600
++++ src/flexdll-0.35/reloc.ml  2016-11-22 17:41:26.000000000 -0600
+@@ -964,7 +964,7 @@
+           if !machine = `x64 then "-Xlinker --image-base -Xlinker 0x10000 " ^ extra_args else extra_args
+         in
+         Printf.sprintf
+-          "%s %s%s -L. %s %s -o %s %s %s %s %s"
++          "%s %s%s -L. %s %s -o %s %s %s %s %s %s"
+           !gcc
+           (if link_exe = `EXE then "" else "-shared ")
+           (if main_pgm then "" else if !noentry then "-Wl,-e0 " else if !machine = `x86 then "-Wl,-e_FlexDLLiniter@12 " else "-Wl,-eFlexDLLiniter ")
+@@ -974,6 +974,7 @@
+           descr
+           files
+           def_file
++          (if !implib then "-Wl,--out-implib=" ^ Filename.quote (Filename.chop_extension output_file ^ ".a") else "")
+           extra_args
+     | `MINGW | `MINGW64 | `GNAT ->
+         let def_file =
+@@ -1144,23 +1145,29 @@
+     if !exe_mode = `EXE then default_libs := "crt2.o" :: !default_libs
+     else default_libs := "dllcrt2.o" :: !default_libs
+   in
++  let cygwin_libs pre =
++    let pre = String.sub pre 0 (String.length pre - 1) in
++    gcc := pre ^ "-gcc";
++    objdump := "/usr/" ^ pre ^ "/bin/objdump";
++    search_path :=
++      !dirs @
++      [
++       Filename.dirname (get_output1 (!gcc ^ " -print-libgcc-file-name"));
++       Filename.dirname (get_output1 (!gcc ^ " -print-file-name=libcygwin.a"));
++       Filename.dirname (get_output1 (!gcc ^ " -print-file-name=w32api/libkernel32.a"));
++      ];
++    default_libs := ["-lkernel32"; "-luser32"; "-ladvapi32";
++                     "-lshell32"; "-lcygwin"; "-lgcc_s"; "-lgcc"]
++  in
+   match !toolchain with
+   | _ when !builtin_linker ->
+       search_path := !dirs;
+       add_flexdll_obj := false;
+       noentry := true
+-  | `CYGWIN | `CYGWIN64 ->
+-      gcc := "gcc";
+-      objdump := "objdump";
+-      search_path :=
+-        !dirs @
+-          [
+-           "/lib";
+-           "/lib/w32api";
+-           Filename.dirname (get_output1 ~use_bash:true "gcc -print-libgcc-file-name");
+-          ];
+-      default_libs := ["-lkernel32"; "-luser32"; "-ladvapi32";
+-                       "-lshell32"; "-lcygwin"; "-lgcc"]
++  | `CYGWIN ->
++      cygwin_libs Version.cygwin_prefix
++  | `CYGWIN64 ->
++      cygwin_libs Version.cygwin64_prefix
+   | `MSVC | `MSVC64 ->
+       search_path := !dirs @
+         parse_libpath (try Sys.getenv "LIB" with Not_found -> "");
+@@ -1222,7 +1229,8 @@
+             pipe
+       | `CYGWIN | `CYGWIN64 ->
+           Printf.sprintf
+-            "gcc -c -o %s %s %s"
++            "%s -c -o %s %s %s"
++            !gcc
+             (Filename.quote tmp_obj)
+             (mk_dirs_opt "-I")
+             file

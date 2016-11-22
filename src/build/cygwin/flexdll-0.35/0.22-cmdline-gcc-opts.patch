@@ -1,0 +1,28 @@
+Taken from
+https://raw.githubusercontent.com/cygwinports/flexdll/master/0.22-cmdline-gcc-opts.patch
+
+Handle the most common gcc args by passing them to gcc.
+
+--- origsrc/flexdll-0.35/cmdline.ml	2009-10-05 11:30:10.000000000 -0500
++++ src/flexdll-0.35/cmdline.ml	2010-02-16 02:01:53.034577700 -0600
+@@ -209,11 +209,19 @@ let parse_cmdline () =
+     | _ -> false
+   in
+ 
++  let tolinker = function
++    | "-f" | "-g" | "-m" | "-O" | "-W" -> true
++    | _ -> false
++  in
++
+   let rec tr = function
+-    | (("-defaultlib"|"-link") as d) :: x :: rest -> d :: x :: tr rest
++    | (("-defaultlib"|"-link"|"-maindll"|"-merge-manifest") as d) :: x :: rest -> d :: x :: tr rest
+     | "/link" :: x :: rest -> "-link" :: x :: tr rest
+     | s :: rest when String.length s > 2 && tosplit (String.sub s 0 2) ->
+         String.sub s 0 2 :: String.sub s 2 (String.length s - 2) :: tr rest
++    | "-pipe" :: rest -> "-link" :: "-pipe" :: tr rest
++    | s :: rest when String.length s >= 2 && tolinker (String.sub s 0 2) ->
++        "-link" :: s :: tr rest
+     | s :: rest when String.length s >= 5 && String.sub s 0 5 = "/link" ->
+         "-link" :: String.sub s 5 (String.length s - 5) :: tr rest
+     | x :: rest when x <> "" && x.[0] = '-' ->
