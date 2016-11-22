@@ -31,8 +31,8 @@ if ($env:ARCH -ne "x86_64") {
 
     echo "opam init -y --auto-setup"
     & $bash "-lc", "opam init -y --auto-setup"
-    echo "opam install -y ocamlfind"
-    & $bash "-lc", "opam install -y ocamlfind"
+    echo "opam install --verbose -y ocamlfind"
+    & $bash "-lc", "opam install --verbose -y ocamlfind"
     CheckExitCode_ "OPAM test"
 
     # TODO Once a release of OCaml is available that does not have the problem
@@ -41,7 +41,7 @@ if ($env:ARCH -ne "x86_64") {
     if ($env:COMPILER -ne "4.03") {
         Install "camlp4" $env:COMPILER
 
-        & $bash "-lc", "opam install -y type_conv"
+        & $bash "-lc", "opam install --verbose -y type_conv"
         CheckExitCode_ "OPAM+Camlp4 test"
     }
 }
