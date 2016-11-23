@@ -1,4 +1,4 @@
-$archive = "https://ci.appveyor.com/api/buildjobs/o3ghjrbpm8u84t9i/artifacts/packages-ocaml.zip"
+$archive = "https://ci.appveyor.com/api/buildjobs/8n9facvbduhwpq6o/artifacts/packages-ocaml.zip"
 
 
 
