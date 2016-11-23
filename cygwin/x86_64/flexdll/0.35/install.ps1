@@ -140,4 +140,4 @@ function Install-Package($package_override, $archive_override) {
 
 
 Install-Package
-Run-Bash "flexlink -version | grep $version"
+Run-Bash "flexlink -help | grep $version"
