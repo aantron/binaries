@@ -2,6 +2,7 @@ set -e
 set -x
 
 MESSAGE=$(git log --format=$'%H\n\n%B' -n 1)
+MESSAGE=$(echo "$MESSAGE" | sed -e 's/\[skip[^]]*\]//g')
 
 if [ -n "$SUBDIRECTORY" ]
 then
