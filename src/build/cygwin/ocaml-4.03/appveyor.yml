@@ -12,7 +12,8 @@ environment:
       CYGSH: C:\Cygwin64\bin\bash -lc
 
 build_script:
-  - "%CYGWIN%\\setup-%ARCH%.exe -q -P cygport,flexdll"
+  - "%CYGWIN%\\setup-%ARCH%.exe -q -P cygport"
+  - ps: '(new-object net.webclient).DownloadString("https://aantron.github.io/binaries/cygwin/$env:ARCH/flexdll/0.35/install.ps1") | PowerShell -Command -'
   - "%CYGSH% 'cd /cygdrive/c/projects/binaries ; ./build.sh'"
 
 artifacts:
