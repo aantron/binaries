@@ -113,21 +113,41 @@ if (-not (Test-Path variable:script:package)) {
 }
 
 # Package installation.
-function Install-Package {
-    $archive_name = "$working_directory\packages-$package.zip"
-    $packages_path = "$working_directory\packages-$package"
+function Install-Package($package_override, $archive_override) {
+    if ($package_override -eq $null) {
+        $package_name = $package
+    }
+    else {
+        $package_name = $package_override
+    }
 
-    Run "Invoke-WebRequest '$archive' -OutFile '$archive_name'"
+    if ($archive_override -eq $null) {
+        $remote_archive = $archive
+    }
+    else {
+        $remote_archive = $archive_override
+    }
+
+    $archive_name = "$working_directory\packages-$package_name.zip"
+    $packages_path = "$working_directory\packages-$package_name"
+
+    Run "Invoke-WebRequest '$remote_archive' -OutFile '$archive_name'"
     Run "Expand-Archive '$archive_name' '$packages_path'"
 
-    Run-CygwinSetup -L -l $packages_path -P $package
+    Run-CygwinSetup -L -l $packages_path -P $package_name
 }
 
 
 
-Run-CygwinSetup -P flexdll
-Run-Bash "flexlink -help | grep `"version 0\\.34`""
+if ($arch -eq "x86") {
+    $flexdll_archive = "https://ci.appveyor.com/api/buildjobs/c3doinoqjyl0twgp/artifacts/packages-flexdll.zip"
+}
+else {
+    $flexdll_archive = "https://ci.appveyor.com/api/buildjobs/40iew40mqnygd3gh/artifacts/packages-flexdll.zip"
+}
+
+Install-Package "flexdll" $flexdll_archive
+Run-Bash "flexlink -help | grep `"version 0\\.35`""
 
 Install-Package
-
 Run-Bash "ocaml -version | grep $version"
