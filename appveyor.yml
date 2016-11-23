@@ -27,6 +27,9 @@
       - {SYSTEM: mingw, ARCH: x86_64, COMPILER: 4.03}
       - {SYSTEM: msvc, ARCH: x86_64, COMPILER: 4.03}
 
+  matrix:
+    fast_finish: true
+
   install:
     - call "C:\Program Files\Microsoft SDKs\Windows\v7.1\Bin\SetEnv.cmd" /x64
 
@@ -57,6 +60,9 @@
       - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: ocaml, VERSION: 4.03}
       - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: opam, VERSION: 1.2, INSTALL: no}
       - {SYSTEM: mingw, ARCH: x86_64, PACKAGE: camlp4, VERSION: 4.03, INSTALL: no}
+
+  matrix:
+    fast_finish: true
 
   build_script:
     - SET /p SUBDIRECTORY=< subdirectory
