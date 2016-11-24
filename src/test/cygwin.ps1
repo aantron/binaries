@@ -35,16 +35,8 @@ if ($env:ARCH -ne "x86_64") {
     & $bash "-lc", "opam install --verbose -y ocamlfind"
     CheckExitCode_ "OPAM test"
 
-    # TODO Once a release of OCaml is available that does not have the problem
-    # in http://caml.inria.fr/mantis/view.php?id=7268, this test should be run
-    # for all OCaml versions.
-    if ($env:COMPILER -ne "4.03") {
-    # TODO Check if Camlp4 is working on 4.04
-    if ($env:COMPILER -ne "4.04") {
-        Install "camlp4" $env:COMPILER
+    Install "camlp4" $env:COMPILER
 
-        & $bash "-lc", "opam install --verbose -y type_conv"
-        CheckExitCode_ "OPAM+Camlp4 test"
-    }
-    }
+    & $bash "-lc", "opam install --verbose -y type_conv"
+    CheckExitCode_ "OPAM+Camlp4 test"
 }

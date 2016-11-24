@@ -1,0 +1,25 @@
+NAME="ocaml-camlp4"
+VERSION="99"
+RELEASE="1"
+
+CATEGORY="OCaml"
+SUMMARY="OCaml preprocessor and pretty-printer"
+DESCRIPTION="Camlp4 is a software system for writing extensible parsers for
+programming languages. It provides a set of OCaml libraries that are used to
+define grammars as well as loadable syntax extensions of such grammars."
+HOMEPAGE="https://github.com/ocaml/camlp4"
+
+SRC_URI="https://github.com/ocaml/camlp4/archive/4.03+1.tar.gz"
+
+# It is necessary to tell cygport the source directory name, because we are
+# using the fake version number "99" to make sure this package is selected over
+# any other Camlp4 package. As a consequence, cygport can't infer the correct
+# source directory name from the version number.
+SRC_DIR="camlp4-4.03-1"
+
+src_compile() {
+    lndirs
+    cd ${B}
+    ./configure || error "configure failed"
+    cygmake -j1 all
+}
