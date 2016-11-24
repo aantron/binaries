@@ -1,9 +1,10 @@
-$archive = "https://ci.appveyor.com/api/buildjobs/7y3j66iq4lctwfmq/artifacts/packages-ocaml.zip"
+$archive = "https://ci.appveyor.com/api/buildjobs/4fr2yryiru3naqxy/artifacts/packages-ocaml-camlp4.zip"
+$package = "ocaml-camlp4"
 
 
 
-$arch = "x86_64"
-$inferred_package = "ocaml"
+$arch = "x86"
+$inferred_package = "camlp4"
 $version = "4.03"
 
 
@@ -139,15 +140,8 @@ function Install-Package($package_override, $archive_override) {
 
 
 
-if ($arch -eq "x86") {
-    $flexdll_archive = "https://ci.appveyor.com/api/buildjobs/c3doinoqjyl0twgp/artifacts/packages-flexdll.zip"
-}
-else {
-    $flexdll_archive = "https://ci.appveyor.com/api/buildjobs/40iew40mqnygd3gh/artifacts/packages-flexdll.zip"
-}
-
-Install-Package "flexdll" $flexdll_archive
-Run-Bash "flexlink -help | grep `"version 0\\.35`""
+echo "Camlp4: checking for compatible OCaml version"
+Run-Bash "ocaml -version | grep $version"
 
 Install-Package
-Run-Bash "ocaml -version | grep $version"
+Run-Bash "camlp4o -version | grep $version"
