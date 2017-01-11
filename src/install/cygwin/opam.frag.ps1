@@ -1,3 +1,8 @@
+# Install Cygwin patch utility.
+Run-CygwinSetup -D -P patch
+Run-Bash "which -a patch"
+Run-Bash 'echo $PATH'
+
 # Install aspcud.
 $aspcud_archive = "http://downloads.sourceforge.net/project/potassco/aspcud/1.9.1/aspcud-1.9.1-win64.zip"
 
